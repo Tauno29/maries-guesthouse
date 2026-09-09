@@ -20,10 +20,10 @@ import {
 } from "lucide-react";
 
 const images = {
-  hero: "/manus-storage/maries-hero_780d02fc.jpg",
-  room: "/manus-storage/maries-room_3ce0239b.jpg",
-  kitchen: "/manus-storage/maries-kitchen_efb33bd6.jpg",
-  courtyard: "/manus-storage/maries-courtyard_1490003e.jpg",
+  hero: "/manus-storage/hero-bedroom_60f8aa54.jpeg",
+  room: "/manus-storage/double-room_9d0fff61.jpeg",
+  bathroom: "/manus-storage/bathroom_50b5cfc4.jpeg",
+  lounge: "/manus-storage/sitting-area_bcb2f316.jpeg",
 };
 
 const essentials = [
@@ -88,9 +88,21 @@ function Home() {
 
   const scrollToEnquire = () => document.querySelector("#enquire")?.scrollIntoView({ behavior: "smooth" });
 
-  const submitEnquiry = (event: FormEvent<HTMLFormElement>) => {
+  const submitEnquiry = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    const formData = new FormData(event.currentTarget);
+    const body = new URLSearchParams();
+    formData.forEach((value, key) => body.append(key, String(value)));
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
+      });
+      setSubmitted(true);
+    } catch {
+      setSubmitted(false);
+    }
   };
 
   return (
@@ -140,13 +152,13 @@ function Home() {
               <img src={images.room} alt="Single guest room with white linen and warm ochre throw" />
               <span className="gallery-card__caption"><span>01</span> The room <ArrowUpRight size={17} /></span>
             </button>
-            <button className="gallery-card gallery-card--small reveal-up" type="button" onClick={() => setActiveImage(images.kitchen)} aria-label="View the kitchen gallery image">
-              <img src={images.kitchen} alt="Self-catering kitchen with cream cupboards and wood counter" />
-              <span className="gallery-card__caption"><span>02</span> Kitchen <ArrowUpRight size={17} /></span>
+            <button className="gallery-card gallery-card--small reveal-up" type="button" onClick={() => setActiveImage(images.bathroom)} aria-label="View the bathroom gallery image">
+              <img src={images.bathroom} alt="Guest bathroom with wall-mounted television and clean modern finishes" />
+              <span className="gallery-card__caption"><span>02</span> Spa bathroom <ArrowUpRight size={17} /></span>
             </button>
-            <button className="gallery-card gallery-card--small gallery-card--courtyard reveal-up" type="button" onClick={() => setActiveImage(images.courtyard)} aria-label="View the courtyard gallery image">
-              <img src={images.courtyard} alt="Shaded guesthouse courtyard with woven chairs and greenery" />
-              <span className="gallery-card__caption"><span>03</span> Courtyard <ArrowUpRight size={17} /></span>
+            <button className="gallery-card gallery-card--small gallery-card--courtyard reveal-up" type="button" onClick={() => setActiveImage(images.lounge)} aria-label="View the guesthouse lounge gallery image">
+              <img src={images.lounge} alt="Bright guesthouse sitting area with chairs and a small window" />
+              <span className="gallery-card__caption"><span>03</span> Sitting area <ArrowUpRight size={17} /></span>
             </button>
           </div>
         </div>
@@ -224,7 +236,7 @@ function Home() {
       <section className="location section-pad" id="find-us">
         <div className="container location__grid">
           <div className="location__image-wrap reveal-up">
-            <img src={images.courtyard} alt="Guesthouse courtyard at golden hour" />
+            <img src={images.lounge} alt="Bright guesthouse sitting area" />
             <div className="location__stamp"><span>Stay<br />softly</span><Sparkles size={15} /></div>
           </div>
           <div className="location__body reveal-up">
@@ -235,7 +247,7 @@ function Home() {
               <div><MapPin size={19} /><span>Mika Shimbuli Street<br />Katutura, Windhoek</span></div>
               <div><Clock3 size={19} /><span>Check-in by arrangement<br />Call before you arrive</span></div>
             </div>
-            <div className="location__actions"><a className="button button--ink" href="tel:0814005332">Call 081 400 5332 <Phone size={16} /></a><a className="text-link" href="#enquire">Send an enquiry <ArrowRight size={15} /></a></div>
+            <div className="location__actions"><a className="button button--ink" href="tel:0814005332">Call 081 400 5332 <Phone size={16} /></a><a className="text-link" href="https://wa.me/264814005332?text=Hello%20Marie%27s%20Guesthouse%2C%20I%27d%20like%20to%20ask%20about%20booking%20a%20room." target="_blank" rel="noreferrer">WhatsApp us <ArrowUpRight size={15} /></a></div>
           </div>
         </div>
       </section>
@@ -248,14 +260,17 @@ function Home() {
             <p>Tell us when you would like to arrive. We will check availability and reply directly.</p>
             <div className="enquiry__callout"><Phone size={18} /><span>Prefer to speak first?<br /><a href="tel:0814005332">081 400 5332</a></span></div>
           </div>
-          <form className="enquiry-form reveal-up" onSubmit={submitEnquiry}>
+          <form className="enquiry-form reveal-up" name="booking-enquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submitEnquiry}>
+            <input type="hidden" name="form-name" value="booking-enquiry" />
+            <p className="hidden"><label>Don’t fill this out if you're human: <input name="bot-field" /></label></p>
             <div className="form-row"><label>Name<input name="name" placeholder="Your name" required /></label><label>Email<input name="email" type="email" placeholder="Email address" required /></label></div>
             <div className="form-row"><label>Phone<input name="phone" type="tel" placeholder="Phone number" required /></label><label>Guests<select name="guests" defaultValue="2 guests"><option>1 guest</option><option>2 guests</option><option>3 guests</option><option>4+ guests</option></select></label></div>
             <div className="form-row"><label>Arrival date<input name="arrival" type="date" required /></label><label>Departure date<input name="departure" type="date" required /></label></div>
             <label>Room preference<select name="room" defaultValue="Any available room"><option>Single room</option><option>Double room</option><option>Any available room</option></select></label>
             <label>Anything we should know?<textarea name="message" rows={3} placeholder="A late arrival, a question, or a little context..." /></label>
-            {submitted && <div className="form-success" role="status"><Check size={17} /> Thank you — your enquiry is ready for Marie’s team. We’ll be in touch shortly.</div>}
+            {submitted && <div className="form-success" role="status"><Check size={17} /> Thank you — your enquiry has been sent to Marie’s team. We’ll be in touch shortly.</div>}
             <button className="button button--gold button--wide" type="submit">{submitted ? "Enquiry sent" : "Send booking enquiry"} <ArrowUpRight size={17} /></button>
+            <a className="button button--whatsapp button--wide" href="https://wa.me/264814005332?text=Hello%20Marie%27s%20Guesthouse%2C%20I%27d%20like%20to%20ask%20about%20booking%20a%20room." target="_blank" rel="noreferrer">Continue on WhatsApp <ArrowUpRight size={17} /></a>
             <p className="form-note">Your details are used only to respond to this booking enquiry.</p>
           </form>
         </div>

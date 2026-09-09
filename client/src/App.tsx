@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, MessageCircle, X } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -55,6 +55,16 @@ export default function App() {
               </button>
             </header>
             <Home />
+            <a
+              className="whatsapp-float"
+              href="https://wa.me/264814005332?text=Hello%20Marie%27s%20Guesthouse%2C%20I%27d%20like%20to%20ask%20about%20booking%20a%20room."
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Chat with Marie’s Guesthouse on WhatsApp"
+            >
+              <MessageCircle className="whatsapp-float__icon" size={18} strokeWidth={1.8} />
+              <span>WhatsApp us</span>
+            </a>
           </div>
         </TooltipProvider>
       </ThemeProvider>

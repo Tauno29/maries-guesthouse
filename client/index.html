@@ -12,6 +12,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <form name="booking-enquiry" netlify netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="booking-enquiry" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <select name="guests"><option>1 guest</option></select>
+      <input type="date" name="arrival" />
+      <input type="date" name="departure" />
+      <select name="room"><option>Any available room</option></select>
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
     <script defer src="%VITE_ANALYTICS_ENDPOINT%/umami" data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
   </body>
