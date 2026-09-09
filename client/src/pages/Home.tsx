@@ -20,10 +20,10 @@ import {
 } from "lucide-react";
 
 const images = {
-  hero: "/manus-storage/hero-bedroom_60f8aa54.jpeg",
-  room: "/manus-storage/double-room_9d0fff61.jpeg",
-  bathroom: "/manus-storage/bathroom_50b5cfc4.jpeg",
-  lounge: "/manus-storage/sitting-area_bcb2f316.jpeg",
+  hero: "/images/hero-bedroom.jpeg",
+  room: "/images/double-room.jpeg",
+  bathroom: "/images/bathroom.jpeg",
+  lounge: "/images/sitting-area.jpeg",
 };
 
 const essentials = [
